@@ -1,0 +1,139 @@
+# \textcolor{blue}{\textit{(Methodology followed)}} (belong in appendix?)
+
+Spatial stability -> across-chip device reliability (or lattice reliability)
+- get the FI across all time for all the 27 qubits
+- compute |f_i-f_j| for all the qubits (i \neq j)
+- plot the histogram
+- the user-defined tolerance is 0 to 2\%
+- the empirical CI is 0 to 20%
+- the empirical mean is 5\%
+- the probability that the value of the inter-qubit difference in fidelity is within tolerance is only 42\%. We want this to be 95% before we can call this device reliable in the lattice sense
+
+Notice that the 95\% confidence interval for the f is huge 
+95\% CI = [67\%, 99\%]
+Probability that f \in tol where tol = \mu \pm \delta where \mu =99\% and \delta = 1\%
+= Prob( f \in tol )
+= Prob( f \in 98\% to 100\% )
+
+To fnd the confidence interval, there are three methods: empirical, bootstrapping and using a analytical fit
+a) Empirical
+Sort x
+find the element which is at 2.5th percentile (the values of the [0.025*N]-th index)
+find the element which is at 97.5th percentile (the values of the [0.975*N]-th index)
+
+To find the probability in [a,b], there are three ways: empirical, bootstrapping and using a analytical fit
+a) Empirical:
+Sort x
+Find the index of the element which is closest to the a. Call it I_1
+Find the index of the element which is closest to the b. Call it I_2
+Prob( f \in [a,b] ) = (I_2 - I_1)/N
+
+\textcolor{blue}{\textit{(what is not adequately understood)}}
+why are current devices far from qualifying as quantum computers
+conceptually, what are the minimum requirements for the physical realization of quantum computing?
+how do you translate this into specific metrics to track?
+what is the minimal set which can form the core device reliability metrics?
+what are the ideal values?
+why are current NISQ devices noisy? hence, what are the non-optimal values?
+but why does the noise characterization fluctuate with time and space?
+how is reliability (or stability) distnct from performance / accuracy?
+
+\textcolor{blue}{\textit{(the four device metrics)}}
+(2) FG: qecc suffers; discuss the threshold theorem; more generally, error correction depends on the noise model assumed; what is the cross-over point at which physical error rate is greater than the logical error rate for the circuit
+
+\textcolor{blue}{\textit{(related work)}}\\
+Generally, people have discussed statistical variation in various context but not from a quality control/ reliability framing.
+\begin{itemize}
+\item Pooser stability pdf
+\item QRNG work
+\item Prakash stuff on temporal variation and noise aware compiler optimization
+\item zero noise extrapolation
+\end{itemize}
+
+# conclusions
+# \textcolor{blue}{\textit{(key contributions)}}
+biggest n-qubit transmon device at the time of writing
+compare and contrast with transistors
+
+# \textcolor{blue}{\textit{(implications for the community)}}
+
+# \textcolor{blue}{\textit{(future work)}}
+How should output tolerance input reliability bounds?
+How can dynamic chracaterization be used for adaptive mitigation to improve accuracy as well as reliability?
+What is the relation between the output Hellinger and the 95 \% confidence interval size?
+Read up on Shewart control chart? 
+Do we want to do Honeywell?
+
+#### APPENDIX ####
+# On tolerance
+The tolerance will be set by the application. For example, if the $\epsilon$-accuracy for the statistical distance (computed using say TVD or Hellinger distance) in the Bernstein-Vazirani problem is specifed, then one can deduce what should be the required tolerance for SPAM fidelity or individual gates.
+
+# On spatial autcorrelation
+For example
+
+
+TODOS:
+Stability -> reliability (if this is not critical then stick to the original word)
+Temporal stability -> across-time device reliability (or temporal reliability)
+Spatial stability -> across-chip device reliability (or lattice reliability)
+<discuss Bravyi and geller: TPN and correlaed noise etc.>
+<Why will the probability of error on a CNOT gate increase with time?>
+(3) Duty Cycle: quantum volume suffers 
+<Unreliable quantum volume (delete?)>
+(4) Addressability: entropy suffers (see nielsen on why entropy is important) 
+<Uncertainty in entropy quantification (delete?)>
+
+**********************************************************
+
+\subsection{Initialization Fidelity}
+
+\textcolor{blue}{\textit{(what is intitialization fidelity)}}\\
+Intitialization fidelity measures the accuracy with which a n-qubit quantum register can be initialized to the $\ket{0}^{\otimes n}$ state. 
+
+\textcolor{blue}{\textit{(how is it measured)}}\\
+It is measured by repeatedly preparing a quantum register in the ground state and performing a projective measurement in the computational basis.
+\begin{equation}
+\hat{F_I} = \frac{N}{N_0}
+\end{equation}
+where $N$ = number of instances when upon measurement, the output string $s$ is observed to be all zeros i.e. $s = (0\cdots 0)_n$ and $N_0$ = total number of circuit executions.
+
+\textcolor{blue}{\textit{(what is the state of the art in this)}}\\
+As of February, 2022, the best reported qubit readout performace was reported by IonQ's barium-based quantum computer which achieved a state preparation and measurement (SPAM) error rate of 99.96 \% (4 errors per 10,000 computations). However, this metric strongly depends on the technology used to physically realize quantum computing (e.g. trapped ions, superconducting transmons, optical) and hence one needs to exercise caution before comparing this metric in isolation across technologies as different technologies bring different pros and cons. 
+
+\textcolor{blue}{\textit{(why is a reliable as well as high FI crucial - motvate separately and in unison)}}
+What use is a quantum processing unit that performs unitary transformations with high fidelity if the input cannot be be reliably initialized. Garbage-in will yield garbage-out, no matter how powerful is the quantum computer.
+\par
+High initialization fidelity is also important for error attribution. If we can be certain that the input quantum state can be prepared and measured with a high fidelity, then the errors in the output can be attributed to issues with the quantum processing unit (QPU).
+
+We want to achieve as high a FI as possible. But that is not enough. We want FI to be reliable too. Our focus in this paper is not accuracy per se, but reliability. By reliability, we mean that the 95 \% confidence interval for the parameter's observed distribution lies within the tolerance required for the application.
+
+# What data did we collect?
+\textcolor{blue}{\textit{(what data did we collect? time-frame/ devices/ qubits)}}
+Only Washington is discussed in this paper
+All 44 are in this link
+Device name, time-period, status, qubits, layout-diagram
+Washington, Dec 2021-Mar 2022, Offline, 5, picture
+
+# results obtained
+\textcolor{blue}{\textit{(what does our analysis show)}}
+graph is FI_temporal.png
+code is FI_v2_mar3_2022.py
+
+# \textcolor{blue}{\textit{(limitations of the study)}}\\
+We studied single qubit registers. A natural extension is the initialization fidelity of n-qubit register where $n \leq N$ (the total register size) i.e. the fidelity of preparing $\ket{0}^{\otimes n}$. Also, we have assumed that state preparation and measurement (SPAM) error can be combined into one metric. Conceptually, they are different but we cannot decouple them experimentally.
+
+We have not tested SPAM error of n-qubit registers.
+
+# discussion
+We clearly see that the temporal variation is high for the Washington qubits, as seen from its 95\% confidence interval.
+Recall that we call a device reliable if the 95\% confidence interval contains the tolerance region.
+We see that it does not.
+In fact the probability that FI is in the tolerance region is only 12\% (instead of 95\%).
+Hence, the device is unreliable.
+
+Similarly, the lattice variation is high for \washington, as seen from its 95\% confidence interval.
+Recall that we call a device reliable across the lattice  if the 95\% confidence interval contains the tolerance region.
+We see that it does not.
+In fact the probability that FI is in the tolerance region is only 12\% (instead of 95\%).
+Hence, the device is unreliable in across the lattice.
+**********************************************************
